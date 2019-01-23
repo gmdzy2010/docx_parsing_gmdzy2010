@@ -21,11 +21,11 @@ class DocxProduce:
     def __init__(self, template_text=None, template_docx=None,
                  paragraph_context=None, para_format=None, table_context=None,
                  picture_context=None):
-        self.contract = Document(docx=template_docx)
+        self.document = Document(docx=template_docx)
         self.template_docx = template_docx
         self.template_text = template_text
         self.contents = None
-        self.styles = self.contract.styles
+        self.styles = self.document.styles
         self.context = paragraph_context
         self.para_format = para_format
         self.table_context = table_context
@@ -55,10 +55,10 @@ class DocxProduce:
                 self.add_picture(content)
             else:
                 self.add_paragraph(content)
-        return self.contract
+        return self.document
     
     def add_paragraph(self, content):
-        p = self.contract.add_paragraph(style=content["element_type"])
+        p = self.document.add_paragraph(style=content["element_type"])
         p_format = p.paragraph_format
         format_map = self.para_format.get(content["format_name"])
         p_format.alignment = format_map.get("alignment")
@@ -80,7 +80,7 @@ class DocxProduce:
     def add_table(self, content):
         context = self.table_context.get(content["format_name"])
         column = context["attr"].get("cols")
-        table = self.contract.add_table(**context["attr"])
+        table = self.document.add_table(**context["attr"])
         table.alignment = WD_TABLE_ALIGNMENT.CENTER
         table.autofit = True
         for index, content_data in enumerate(context["data"]):
@@ -92,7 +92,7 @@ class DocxProduce:
         # TODO: the unittest is not passed.
         path = self.picture_path
         context = self.picture_context.get(content["format_name"])
-        return self.contract.add_picture(path, **context)
+        return self.document.add_picture(path, **context)
         
     def get_contents(self):
         file_obj = open(self.template_text, encoding="UTF-8")
@@ -106,4 +106,4 @@ class DocxProduce:
     def save(self, contract_name="default"):
         self.set_style()
         self.get_contract()
-        return self.contract.save("%s.docx" % contract_name)
+        return self.document.save("%s.docx" % contract_name)
