@@ -1,4 +1,5 @@
 # 文本模板转DOCX文件
+[![PyPI](https://img.shields.io/pypi/v/docx-parsing-gmdzy2010.svg)](https://pypi.org/project/docx-parsing-gmdzy2010/)
 
 
 ### 功能概述
