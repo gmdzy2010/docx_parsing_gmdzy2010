@@ -20,7 +20,8 @@ _________
 ###### 3. 文本模板的上下文数据
 上下文数据为一个字典型的变量，用来对模板的变量进行格式化。  
 
->3.1 段落上下文对象`PARAGRAPH_CONTEXT`
+3.1 段落上下文对象`PARAGRAPH_CONTEXT`  
+
 例如，文本模板中有一个段落上下文变量`test_context`
 ```
 ...
@@ -39,7 +40,8 @@ PARAGRAPH_CONTEXT = {
 }
 
 ```
->3.2 表格上下文对象`TABLE_CONTEXT`
+3.2 表格上下文对象`TABLE_CONTEXT`  
+
 例如，文本模板中有一个表格
 ```
 ...
@@ -67,7 +69,8 @@ TABLE_CONTEXT = {
     },
 },
 ```
->3.3 图片上下文对象`PICTURE_CONTEXT`  
+3.3 图片上下文对象`PICTURE_CONTEXT`  
+
 仍在测试中，后续单元测试通过后会将文档更新
 
 ### 使用
