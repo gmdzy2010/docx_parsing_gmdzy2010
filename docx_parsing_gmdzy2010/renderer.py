@@ -6,6 +6,7 @@ from docx.shared import Pt
 from docx.oxml.ns import qn
 
 from docx_parsing_gmdzy2010.elements import Elements, element_splitting
+from docx_parsing_gmdzy2010.settings import PARAGRAPH_FORMAT
 
 
 class DocxProduce:
@@ -19,8 +20,8 @@ class DocxProduce:
     }
     
     def __init__(self, template_text=None, template_docx=None,
-                 paragraph_context=None, para_format=None, table_context=None,
-                 picture_context=None):
+                 para_format=PARAGRAPH_FORMAT, paragraph_context=None,
+                 table_context=None, picture_context=None):
         self.document = Document(docx=template_docx)
         self.template_docx = template_docx
         self.template_text = template_text
