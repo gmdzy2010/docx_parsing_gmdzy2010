@@ -1,3 +1,4 @@
+from docx.enum.style import WD_STYLE_TYPE
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from docx.shared import Pt
 
@@ -54,4 +55,12 @@ PARAGRAPH_FORMAT = {
         "alignment": WD_PARAGRAPH_ALIGNMENT.LEFT,
         "first_line_indent": Pt(24),
     },
+}
+
+ALL_STYLES = {
+    "cover": (WD_STYLE_TYPE.PARAGRAPH, Pt(18)),
+    "vice_cover": (WD_STYLE_TYPE.PARAGRAPH, Pt(14)),
+    "body": (WD_STYLE_TYPE.PARAGRAPH, Pt(12)),
+    "title": (WD_STYLE_TYPE.PARAGRAPH, Pt(24)),
+    "heading": (WD_STYLE_TYPE.PARAGRAPH, Pt(12)),
 }

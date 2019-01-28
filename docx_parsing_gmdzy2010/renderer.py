@@ -6,22 +6,17 @@ from docx.shared import Pt
 from docx.oxml.ns import qn
 
 from docx_parsing_gmdzy2010.elements import Elements, element_splitting
-from docx_parsing_gmdzy2010.settings import PARAGRAPH_FORMAT
+from docx_parsing_gmdzy2010.settings import PARAGRAPH_FORMAT, ALL_STYLES
 
 
 class DocxProduce:
     """ContractProduce class """
     picture_path = os.path.dirname(os.path.abspath(__file__))
-    extra_style = {
-        "vice_cover": (WD_STYLE_TYPE.PARAGRAPH, Pt(14)),
-        "body": (WD_STYLE_TYPE.PARAGRAPH, Pt(12)),
-        "title": (WD_STYLE_TYPE.PARAGRAPH, Pt(24)),
-        "heading": (WD_STYLE_TYPE.PARAGRAPH, Pt(12)),
-    }
     
     def __init__(self, template_text=None, template_docx=None,
-                 para_format=PARAGRAPH_FORMAT, paragraph_context=None,
-                 table_context=None, picture_context=None):
+                 para_format=PARAGRAPH_FORMAT, all_styles=ALL_STYLES,
+                 paragraph_context=None, table_context=None,
+                 picture_context=None):
         self.document = Document(docx=template_docx)
         self.template_docx = template_docx
         self.template_text = template_text
@@ -31,6 +26,7 @@ class DocxProduce:
         self.picture_context = picture_context
         self.contents = None
         self.styles = self.document.styles
+        self.all_styles = all_styles
 
     def _add_style(self, style_name, style_type, font_size, base_style=None):
         style = self.styles.add_style(style_name, style_type)
@@ -38,14 +34,16 @@ class DocxProduce:
         style.font.size = font_size
         return style
     
+    def _set_init_style(self):
+        init = self.styles.add_style('init', WD_STYLE_TYPE.PARAGRAPH)
+        self.styles['init'].font.name = 'Times New Roman'
+        self.styles['init']._element.rPr.rFonts.set(qn('w:eastAsia'), '宋体')
+        return init
+    
     def set_styles(self):
-        default = WD_STYLE_TYPE.PARAGRAPH
-        cover = self.styles.add_style('cover', default)
-        self.styles['cover'].font.name = 'Times New Roman'
-        self.styles['cover'].font.size = Pt(18)
-        self.styles['cover']._element.rPr.rFonts.set(qn('w:eastAsia'), '宋体')
-        for name, prop in self.extra_style.items():
-            self._add_style(name, prop[0], prop[1], base_style=cover)
+        init = self._set_init_style()
+        for name, prop in self.all_styles.items():
+            self._add_style(name, prop[0], prop[1], base_style=init)
     
     def get_document(self):
         self.contents = self.get_contents()
