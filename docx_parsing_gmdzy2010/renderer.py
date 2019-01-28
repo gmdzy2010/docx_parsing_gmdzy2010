@@ -10,7 +10,9 @@ from docx_parsing_gmdzy2010.settings import PARAGRAPH_FORMAT, ALL_STYLES
 
 
 class DocxProduce:
-    """ContractProduce class """
+    """The paragraph context, table context or picture context MUST be ready
+    to participating into the process of template rendering. Optionally, the
+    same to the paragraph format and styles."""
     picture_path = os.path.dirname(os.path.abspath(__file__))
     
     def __init__(self, template_text=None, template_docx=None,
@@ -35,6 +37,8 @@ class DocxProduce:
         return style
     
     def _set_init_style(self):
+        """By default, the font type of chinese and western language are Song
+        and Times New Roman, respectively."""
         init = self.styles.add_style('init', WD_STYLE_TYPE.PARAGRAPH)
         self.styles['init'].font.name = 'Times New Roman'
         self.styles['init']._element.rPr.rFonts.set(qn('w:eastAsia'), '宋体')
@@ -46,6 +50,8 @@ class DocxProduce:
             self._add_style(name, prop[0], prop[1], base_style=init)
     
     def get_document(self):
+        """Each type of element in text template should mapping to
+        corresponding method."""
         self.contents = self.get_contents()
         for content in self.contents:
             if content["element_type"] == "table":
@@ -57,6 +63,7 @@ class DocxProduce:
         return self.document
     
     def add_paragraph(self, content):
+        """Method to handle paragraph and run"""
         paragraph = self.document.add_paragraph(style=content["element_type"])
         p_format = paragraph.paragraph_format
         format_map = self.para_format.get(content["format_name"])
@@ -79,6 +86,8 @@ class DocxProduce:
         return row_cells
     
     def add_table(self, content):
+        """Method to handle table"""
+        # TODO: attributes of rows and cols can automatically gained.
         context = self.table_context.get(content["format_name"])
         column = context["attr"].get("cols")
         table = self.document.add_table(**context["attr"])
@@ -97,6 +106,9 @@ class DocxProduce:
         return self.document.add_picture(path, **context)
     
     def get_contents(self, encoding="UTF-8"):
+        """This method takes the text template into file object, then generate
+        the basic paragraph elements. the elements is a generator, popping out
+        every two line."""
         file_obj = open(self.template_text, encoding=encoding)
         elements = Elements(file_obj)
         contents = [
