@@ -4,7 +4,7 @@ import re
 def element_splitting(element, context, paragraph_sep="||", style_sep="::"):
     """
     Each instance of Elements should be handled by this func, the data
-    structure evolved into template as below:
+    structure evolved into context as below:
 
     element = {
         "element_type": element_type,
