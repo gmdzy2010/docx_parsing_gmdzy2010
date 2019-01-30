@@ -67,7 +67,7 @@ class Price2UpperChinese:
             if number == 0:
                 thousand_char = re.sub(r'零', '', thousand_char)
         chars = [thousand_char, hundred_char, ten_char, unit_char]
-        suffix = self.base_map.get(base) if self.price > base else ""
+        suffix = self.base_map.get(base) if self.price >= base else ""
         return "{}{}".format("".join(chars), suffix)
     
     def get_thousand_char(self, number=None):
