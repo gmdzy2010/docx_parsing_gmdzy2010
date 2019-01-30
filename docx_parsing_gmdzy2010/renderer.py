@@ -30,7 +30,6 @@ class DocxProduce:
         self.contents = None
         self.styles = self.document.styles
         self.all_styles = all_styles
-        self.fields = []
 
     def _add_style(self, style_name, style_type, font_size, base_style=None):
         style = self.styles.add_style(style_name, style_type)
@@ -66,8 +65,6 @@ class DocxProduce:
     
     def add_paragraph(self, content):
         """Method to handle paragraph and run"""
-        sub_fields = re.findall('[{](.*?)[}]', content["original_text"])
-        self.fields.extend(sub_fields if sub_fields else [])
         paragraph = self.document.add_paragraph(style=content["element_type"])
         p_format = paragraph.paragraph_format
         format_map = self.para_format.get(content["format_name"])
@@ -124,5 +121,25 @@ class DocxProduce:
     def save(self, to_path="", file_name="default"):
         self.set_styles()
         self.get_document()
-        self.fields = list(set(self.fields))
         return self.document.save("{}{}.docx".format(to_path, file_name))
+
+
+class ContextFields:
+    """Class to get all fields of context"""
+    
+    def __init__(self, template_text=None, encoding="UTF-8"):
+        self.template_text = template_text
+        self.fields = self.get_fields(encoding=encoding)
+    
+    def get_fields(self, encoding="UTF-8"):
+        """This method return the field list of the input text template."""
+        all_fields = []
+        file_obj = open(self.template_text, encoding=encoding)
+        elements = Elements(file_obj)
+        for element in elements:
+            *_, paragraph_text = element
+            sub_fields = re.findall('[{](.*?)[}]', paragraph_text)
+            all_fields.extend(sub_fields if sub_fields else [])
+        file_obj.close()
+        all_fields = list(set(all_fields))
+        return all_fields
