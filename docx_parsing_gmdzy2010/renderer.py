@@ -1,4 +1,5 @@
 import os
+import re
 from docx import Document
 from docx.enum.style import WD_STYLE_TYPE
 from docx.enum.table import WD_TABLE_ALIGNMENT
@@ -29,6 +30,7 @@ class DocxProduce:
         self.contents = None
         self.styles = self.document.styles
         self.all_styles = all_styles
+        self.fields = []
 
     def _add_style(self, style_name, style_type, font_size, base_style=None):
         style = self.styles.add_style(style_name, style_type)
@@ -64,6 +66,8 @@ class DocxProduce:
     
     def add_paragraph(self, content):
         """Method to handle paragraph and run"""
+        sub_fields = re.findall('[{](.*?)[}]', content["original_text"])
+        self.fields.extend(sub_fields if sub_fields else [])
         paragraph = self.document.add_paragraph(style=content["element_type"])
         p_format = paragraph.paragraph_format
         format_map = self.para_format.get(content["format_name"])
@@ -120,4 +124,5 @@ class DocxProduce:
     def save(self, to_path="", file_name="default"):
         self.set_styles()
         self.get_document()
+        self.fields = list(set(self.fields))
         return self.document.save("{}{}.docx".format(to_path, file_name))

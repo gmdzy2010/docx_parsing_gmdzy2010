@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="UTF-8") as fh:
 
 setuptools.setup(
     name="docx_parsing_gmdzy2010",
-    version="1.2.2",
+    version="1.3.0",
     author="gmdzy2010",
     author_email="gmdzy2010@126.com",
     description="一个简单的文本模板转DOCX文件的包",

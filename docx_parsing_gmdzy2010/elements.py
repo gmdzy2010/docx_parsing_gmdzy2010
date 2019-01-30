@@ -20,6 +20,7 @@ def element_splitting(element, context, paragraph_sep="||", style_sep="::"):
                 "bold": False,
             },
         ],
+        "original_text": text,
     }
 
     each element for value mapping to "contents" corresponding to the run unit
@@ -53,6 +54,7 @@ def element_splitting(element, context, paragraph_sep="||", style_sep="::"):
         "element_type": element_type,
         "format_name": format_name,
         "contents": contents,
+        "original_text": text,
     }
 
 
